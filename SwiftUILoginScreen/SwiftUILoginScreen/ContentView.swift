@@ -17,7 +17,7 @@ struct ContentView: View {
                 WelcomeView()
                 ImageView()
                 LoginView()
-            }
+            }.padding()
         }
         
     }
@@ -67,11 +67,31 @@ struct LoginView: View {
                     Image(systemName: "lock").foregroundColor(.black)
                     SecureField("Password", text: self.$password)
                     
+                    Button(action:{
+                        print("show password")
+                    }){
+                        Image(systemName: "eye").foregroundColor(.black)
+                    }
+                    
                 }.padding(.vertical, 20)
                 
-                
-                
-            }.padding(.vertical).padding(.horizontal, 20).padding(.bottom, 40).background(Color.white)
+            }.padding(.vertical)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40)
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.top, 0)
+            
+            Button("Sign in") {
+                print("username: \(self.username), password: \(self.password)")
+            }.font(.headline).foregroundColor(Color.white)
+                .frame(width: UIScreen.main.bounds.width - 100, height: 60, alignment: .center)
+                .background(Color.blue)
+                .cornerRadius(15.0)
+                .offset(y: -40)
+                .padding(.bottom, -40)
+            
+            Text("Forgot password").foregroundColor(Color.white).padding(.top, 20)
             
         }
         

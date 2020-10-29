@@ -14,13 +14,13 @@ struct AppView: View {
             TopCategoryView()
                 .tabItem {
                     Image(systemName: "list.dash")
-                    Text("Menu")
+                    Text("HOME")
                 }
 
-            TopCategoryView()
+            HomeView()
                 .tabItem {
                     Image(systemName: "square.and.pencil")
-                    Text("Order")
+                    Text("ABOUT")
                 }
         }
     }

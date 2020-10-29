@@ -1,41 +1,36 @@
 //
-//  TopCategoryView.swift
+//  LanguageView.swift
 //  LearnWithTranslation
 //
-//  Created by MAC on 18.10.2020.
+//  Created by MAC on 24.10.2020.
 //  Copyright © 2020 cagdaseksi. All rights reserved.
 //
 
 import SwiftUI
 
-struct TopCategoryView: View {
+
+struct LanguageView: View {
     
-    @State private var topCategoryData = [EntityTopCategory]()
+    @State private var languageData = [EntityAppLanguage]()
+    var subCategory: EntitySubCategory
     
     var body: some View {
-        NavigationView{
-            List(topCategoryData, id: \.Title) { item in
-                NavigationLink(destination: CategoryView(topCategory: item)) {
-                    
-                    SideList(text: item.Title ?? "", detail: item.ShortDescription ?? "", show: self.someData(topCategoryid: item.Id))
+        List(languageData, id: \.Id) { item in
+            NavigationLink(destination: QuestionView(subCategory: self.subCategory, appLanguage: item)) {
                 
-                }.navigationBarTitle("Çeviriyle Öğren", displayMode: .inline).navigationBarBackButtonHidden(true)
+                SideItem(text: "\(item.FromTitle ?? "") ➡️ \(item.ToTitle ?? "")")
             
-            }.onAppear(perform: loadData)
-        }
+            }.navigationBarTitle("\(self.subCategory.Title ?? "")", displayMode: .inline)
+        
+        }.onAppear(perform: loadData)
     }
-    
-    func someData(topCategoryid: Int) -> Bool {
-        return Service.v1.someEntityExists(topCategoryid: topCategoryid)
-    }
-    
 }
 
-extension TopCategoryView
+extension LanguageView
 {
     func loadData() {
         
-        guard let url = URL(string: "\(baseUrl)/TopCategory") else {
+        guard let url = URL(string: "\(baseUrl)/AppRootLanguage") else {
             return
         }
         
@@ -56,12 +51,12 @@ extension TopCategoryView
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     decoder.dateDecodingStrategy = .secondsSince1970
-                    let launch = try decoder.decode(TopCategory.self, from: jsonData)
+                    let launch = try decoder.decode(AppLanguage.self, from: jsonData)
                     
                     //let deserializedValues = try JSONSerialization.jsonObject(with: data)
                     //print(deserializedValues)
                     DispatchQueue.main.async {
-                        self.topCategoryData = launch.Entity
+                        self.languageData = launch.Entity
                     }
                 }
                 catch {
@@ -76,27 +71,6 @@ extension TopCategoryView
             //print(error)
             
         }.resume()
-    }
-    
-    func loadGetData() {
-        
-        guard let url = URL(string: "http://api.bankomaclar.com/api/v1/TopCategory") else {
-            return
-        }
-        
-        if let data = try? Data(contentsOf: url) {
-            parse(json: data)
-        }
-
-        
-    }
-    
-    func parse(json: Data) {
-        let decoder = JSONDecoder()
-
-        if let json = try? decoder.decode(TopCategory.self, from: json) {
-            print(json)
-        }
     }
     
 }
